@@ -61,7 +61,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-kmovie}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kmovie}
     volumes:
-      - kmovie-db-data:/var/lib/postgresql/data
+      - ~/DockerDrives/KMovieDatabase:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     healthcheck:
@@ -77,7 +77,7 @@ services:
     container_name: database-migration-runner
     command: -url=jdbc:postgresql://database:5432/${POSTGRES_DB} -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} migrate
     volumes:
-      - ./modules/database/migrations:/flyway/sql
+      - ./db/migrations:/flyway/sql
     depends_on:
       database:
         condition: service_healthy
@@ -91,7 +91,7 @@ services:
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
     volumes:
-      - kmovie-redis-data:/data
+      - ~/DockerDrives/KMovieRedis:/data
     ports:
       - "${REDIS_PORT:-6379}:6379"
     healthcheck:
