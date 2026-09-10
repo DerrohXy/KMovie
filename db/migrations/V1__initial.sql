@@ -42,6 +42,13 @@ CREATE TABLE IF NOT EXISTS videos (
     name VARCHAR(1000) NOT NULL,
     description VARCHAR(1000),
     duration INTEGER NOT NULL,
+    width INTEGER,
+    height INTEGER,
+    aspect_ratio VARCHAR(20),
+    video_codec VARCHAR(50),
+    audio_codec VARCHAR(50),
+    frame_rate REAL,
+    bitrate INTEGER,
     -- base model fields
     id UUID PRIMARY KEY,
     date_created TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

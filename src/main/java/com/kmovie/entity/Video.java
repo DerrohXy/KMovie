@@ -29,4 +29,27 @@ public class Video extends BaseEntity {
     /** Duration in seconds. */
     @Column(name = "duration", nullable = false)
     private Long duration;
+
+    // ---- Technical metadata, extracted from the file at upload time by VideoDetailsService ----
+    @Column(name = "width")
+    private Integer width;
+
+    @Column(name = "height")
+    private Integer height;
+    /** e.g. "16:9" */
+    @Column(name = "aspect_ratio")
+    private String aspectRatio;
+
+    @Column(name = "video_codec")
+    private String videoCodec;
+
+    @Column(name = "audio_codec")
+    private String audioCodec;
+
+    @Column(name = "frame_rate")
+    private Double frameRate;
+
+    /** Overall bitrate in bits/second, if reported. */
+    @Column(name = "bitrate")
+    private Long bitrate;
 }

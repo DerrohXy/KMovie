@@ -1,6 +1,7 @@
 package com.kmovie.service;
 
 import com.kmovie.dto.request.VideoUpdateRequest;
+import com.kmovie.dto.response.VideoDetails;
 import com.kmovie.entity.FileEntity;
 import com.kmovie.entity.Title;
 import com.kmovie.entity.Video;
@@ -24,6 +25,7 @@ public class VideoService {
     private final FileRepository fileRepository;
     private final TitleService titleService;
     private final S3StorageService s3StorageService;
+    private final VideoDetailsService videoDetailsService;
 
     public List<Video> listByTitle(UUID titleId) {
         titleService.getById(titleId); // 404s if the title doesn't exist
@@ -46,6 +48,9 @@ public class VideoService {
             throw ApiException.badRequest("This movie title already has a video. Delete it before uploading a new one.");
         }
 
+        // Read duration/resolution/codecs/etc off the file before it's shipped to S3.
+        VideoDetails details = videoDetailsService.extract(file);
+
         FileEntity uploaded = s3StorageService.upload(file, "videos/" + titleId);
 
         Video video = new Video();
@@ -53,7 +58,15 @@ public class VideoService {
         video.setFileId(uploaded.getId());
         video.setName(name != null && !name.isBlank() ? name : file.getOriginalFilename());
         video.setDescription(description);
-        video.setDuration(duration);
+        // Prefer an explicitly supplied duration, fall back to what ffprobe read from the file.
+        video.setDuration(duration != null ? duration : details.getDurationSeconds());
+        video.setWidth(details.getWidth());
+        video.setHeight(details.getHeight());
+        video.setAspectRatio(details.getAspectRatio());
+        video.setVideoCodec(details.getVideoCodec());
+        video.setAudioCodec(details.getAudioCodec());
+        video.setFrameRate(details.getFrameRate());
+        video.setBitrate(details.getBitrate());
         return videoRepository.save(video);
     }
 

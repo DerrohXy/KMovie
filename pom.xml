@@ -22,6 +22,8 @@
         <aws-sdk.version>2.27.21</aws-sdk.version>
         <jjwt.version>0.12.6</jjwt.version>
         <libphonenumber.version>8.13.45</libphonenumber.version>
+        <gcs.version>5.5.0</gcs.version>
+        <jaffree.version>2023.09.10</jaffree.version>
     </properties>
 
     <dependencies>
@@ -75,6 +77,20 @@
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
             <version>${aws-sdk.version}</version>
+        </dependency>
+
+        <!-- Google Cloud Storage -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>spring-cloud-gcp-starter-storage</artifactId>
+            <version>${gcs.version}</version>
+        </dependency>
+
+        <!-- FFprobe wrapper, used by VideoDetailsService to read duration/resolution/codecs -->
+        <dependency>
+            <groupId>com.github.kokorin.jaffree</groupId>
+            <artifactId>jaffree</artifactId>
+            <version>${jaffree.version}</version>
         </dependency>
 
         <!-- Phone number validation -->
