@@ -1,0 +1,5 @@
+*.env
+*.config
+.idea
+.dist
+.vscode

@@ -1,0 +1,99 @@
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kmovie-webserver
+    restart: always
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      SERVER_PORT: 8080
+      DATABASE_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-kmovie}
+      DATABASE_USERNAME: ${POSTGRES_USER:-kmovie}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-kmovie}
+      JPA_DDL_AUTO: ${JPA_DDL_AUTO:-update}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+      JWT_EXPIRATION_DAYS: ${JWT_EXPIRATION_DAYS:-7}
+      JWT_STAY_LOGGED_IN_EXPIRATION_DAYS: ${JWT_STAY_LOGGED_IN_EXPIRATION_DAYS:-90}
+      JWT_ISSUER: ${JWT_ISSUER:-kmovie}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET:-kmovie-media}
+      AWS_S3_ENDPOINT: ${AWS_S3_ENDPOINT:-}
+      AWS_S3_PATH_STYLE_ACCESS: ${AWS_S3_PATH_STYLE_ACCESS:-false}
+      MAIL_FROM: ${MAIL_FROM:-no-reply@kmovie.local}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USERNAME: ${SMTP_USERNAME:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMS_PROVIDER: ${SMS_PROVIDER:-africastalking}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_FROM_NUMBER: ${TWILIO_FROM_NUMBER:-}
+      AT_USERNAME: ${AT_USERNAME:-}
+      AT_API_KEY: ${AT_API_KEY:-}
+      AT_SENDER_ID: ${AT_SENDER_ID:-}
+      OTP_LENGTH: ${OTP_LENGTH:-6}
+      OTP_EXPIRATION_MINUTES: ${OTP_EXPIRATION_MINUTES:-15}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-*}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - kmovie-network
+
+  database:
+    image: postgres:16-alpine
+    container_name: kmovie-database
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kmovie}
+      POSTGRES_USER: ${POSTGRES_USER:-kmovie}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kmovie}
+    volumes:
+      - kmovie-db-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kmovie} -d ${POSTGRES_DB:-kmovie}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - kmovie-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: kmovie-redis
+    restart: always
+    command: >
+      sh -c 'if [ -n "$$REDIS_PASSWORD" ]; then redis-server --requirepass "$$REDIS_PASSWORD"; else redis-server; fi'
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+    volumes:
+      - kmovie-redis-data:/data
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep -q PONG || redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - kmovie-network
+
+volumes:
+  kmovie-db-data:
+  kmovie-redis-data:
+
+networks:
+  kmovie-network:
+    driver: bridge
