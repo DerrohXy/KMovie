@@ -17,15 +17,15 @@ import lombok.Setter;
 @Setter
 public class FileEntity extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "size", nullable = false)
     private Long size;
 
-    @Column(nullable = false)
+    @Column(name = "storage_key", nullable = false)
     private String storageKey;
 
-    @Column
+    @Column(name = "content_type")
     private String contentType;
 }

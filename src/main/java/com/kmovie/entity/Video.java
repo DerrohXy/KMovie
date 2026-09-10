@@ -14,18 +14,19 @@ import java.util.UUID;
 @Setter
 public class Video extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(name = "title_id", nullable = false)
     private UUID titleId;
 
-    @Column(nullable = false)
+    @Column(name = "file_id", nullable = false)
     private UUID fileId;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(length = 2000)
+    @Column(name = "description", length = 2000)
     private String description;
 
     /** Duration in seconds. */
+    @Column(name = "duration", nullable = false)
     private Long duration;
 }

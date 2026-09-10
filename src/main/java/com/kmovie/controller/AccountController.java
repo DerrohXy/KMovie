@@ -73,10 +73,6 @@ public class AccountController {
         return ResponseEntity.ok(ApiResponse.ok("Account deleted"));
     }
 
-    /**
-     * Beyond the original spec: verification endpoints, needed to actually flip
-     * isEmailVerified/isPhoneNumberVerified once the queued OTP messages are delivered.
-     */
     @PostMapping("/verify-email")
     public ResponseEntity<ApiResponse<Void>> verifyEmail(@RequestParam String code) {
         User user = currentUserProvider.getUser();

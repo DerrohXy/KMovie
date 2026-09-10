@@ -47,6 +47,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      database_migration_runner:
+        condition: service_completed_successfully
     networks:
       - kmovie-network
 
@@ -69,6 +71,16 @@ services:
       retries: 10
     networks:
       - kmovie-network
+
+  database_migration_runner:
+    image: flyway/flyway:10
+    container_name: database-migration-runner
+    command: -url=jdbc:postgresql://database:5432/${POSTGRES_DB} -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} migrate
+    volumes:
+      - ./modules/database/migrations:/flyway/sql
+    depends_on:
+      database:
+        condition: service_healthy
 
   redis:
     image: redis:7-alpine

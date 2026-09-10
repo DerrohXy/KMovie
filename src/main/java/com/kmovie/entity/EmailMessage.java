@@ -17,25 +17,26 @@ import java.time.LocalDateTime;
 @Setter
 public class EmailMessage extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(name = "receiver", nullable = false)
     private String receiver;
 
-    @Column(nullable = false)
+    @Column(name = "subject", nullable = false)
     private String subject;
 
     @Lob
-    @Column(nullable = false)
+    @Column(name = "message", nullable = false)
     private String message;
 
     /** Comma-separated list of File ids to attach, if any. */
-    @Column(length = 2000)
+    @Column(name = "file_ids", length = 2000)
     private String fileIds;
 
-    @Column(nullable = false)
+    @Column(name = "is_html", nullable = false)
     private boolean isHtml = false;
 
-    @Column(nullable = false)
+    @Column(name = "is_sent", nullable = false)
     private boolean isSent = false;
 
+    @Column(name = "date_sent")
     private LocalDateTime dateSent;
 }

@@ -14,33 +14,35 @@ import java.util.UUID;
 @Setter
 public class User extends BaseEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @JsonIgnore
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(name = "is_admin", nullable = false)
     private boolean isAdmin = false;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "subscription", nullable = false)
     private Subscription subscription = Subscription.BASIC;
 
-    @Column(nullable = false)
+    @Column(name = "is_email_verified", nullable = false)
     private boolean isEmailVerified = false;
 
-    @Column(nullable = false)
+    @Column(name = "is_phone_number_verified", nullable = false)
     private boolean isPhoneNumberVerified = false;
 
+    @Column(name = "profile_picture_file_id")
     private UUID profilePictureFileId;
 
-    @Column(nullable = false)
+    @Column(name = "is_suspended", nullable = false)
     private boolean isSuspended = false;
 }

@@ -21,17 +21,24 @@ import java.util.UUID;
 @Setter
 public class VideoPlay extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(name = "user_id", nullable = false)
     private UUID userId;
 
-    @Column(nullable = false)
+    @Column(name = "video_id", nullable = false)
     private UUID videoId;
 
-    @Column(nullable = false)
+    @Column(name = "title_id", nullable = false)
     private UUID titleId;
 
-    @Column(nullable = false)
+    @Column(name = "start_play_time", nullable = false)
     private LocalDateTime startPlayTime;
 
+    @Column(name = "end_play_time")
     private LocalDateTime endPlayTime;
+
+    @Column(name = "playback_start_point")
+    private Long playbackStartPoint;
+
+    @Column(name = "playback_end_point")
+    private Long playbackEndPoint;
 }

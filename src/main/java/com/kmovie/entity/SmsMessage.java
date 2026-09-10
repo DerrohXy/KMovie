@@ -19,14 +19,15 @@ import java.time.LocalDateTime;
 @Setter
 public class SmsMessage extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(name = "receiver", nullable = false)
     private String receiver;
 
-    @Column(nullable = false, length = 1000)
+    @Column(name = "message", nullable = false, length = 1000)
     private String message;
 
-    @Column(nullable = false)
+    @Column(name = "is_sent", nullable = false)
     private boolean isSent = false;
 
+    @Column(name = "date_sent")
     private LocalDateTime dateSent;
 }

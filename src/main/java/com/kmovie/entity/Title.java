@@ -19,17 +19,18 @@ import java.util.UUID;
 @Setter
 public class Title extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     /** Self-referencing foreign key; null for a top level title. */
+    @Column(name = "parent_title_id")
     private UUID parentTitleId;
 
     /** Comma-concatenated Genre enum names, e.g. "ACTION,DRAMA". */
-    @Column(length = 1000)
+    @Column(name = "genre", length = 1000)
     private String genre;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "category", nullable = false)
     private Category category;
 }

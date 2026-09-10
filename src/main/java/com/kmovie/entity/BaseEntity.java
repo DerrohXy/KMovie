@@ -22,18 +22,19 @@ public abstract class BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "date_created", nullable = false, updatable = false)
     private LocalDateTime dateCreated;
 
-    @Column(nullable = false)
+    @Column(name = "date_updated", nullable = false)
     private LocalDateTime dateUpdated;
 
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 
+    @Column(name = "date_deleted")
     private LocalDateTime dateDeleted;
 
     @PrePersist
