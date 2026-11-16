@@ -25,8 +25,8 @@ public class VideoResponse {
 
     public VideoResponse(Video video) {
         this.id = video.getId();
-        this.titleId = video.getTitleId();
-        this.fileId = video.getFileId();
+        this.titleId = video.getTitle().getId();
+        this.fileId = video.getFile().getId();
         this.name = video.getName();
         this.description = video.getDescription();
         this.duration = video.getDuration();

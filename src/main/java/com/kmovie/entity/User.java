@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -40,8 +38,9 @@ public class User extends BaseEntity {
     @Column(name = "is_phone_number_verified", nullable = false)
     private boolean isPhoneNumberVerified = false;
 
-    @Column(name = "profile_picture_file_id")
-    private UUID profilePictureFileId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_picture_file_id")
+    private FileEntity profilePictureFile;
 
     @Column(name = "is_suspended", nullable = false)
     private boolean isSuspended = false;

@@ -23,8 +23,9 @@ public class Title extends BaseEntity {
     private String name;
 
     /** Self-referencing foreign key; null for a top level title. */
-    @Column(name = "parent_title_id")
-    private UUID parentTitleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_title_id")
+    private Title parentTitle;
 
     /** Comma-concatenated Genre enum names, e.g. "ACTION,DRAMA". */
     @Column(name = "genre", length = 1000)

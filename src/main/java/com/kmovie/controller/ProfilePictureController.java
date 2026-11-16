@@ -44,10 +44,10 @@ public class ProfilePictureController {
     }
 
     private ResponseEntity<?> servePicture(User user) {
-        if (user.getProfilePictureFileId() == null) {
+        if (user.getProfilePictureFile() == null) {
             throw ApiException.notFound("This user has no profile picture");
         }
-        FileEntity file = fileRepository.findByIdAndIsDeletedFalse(user.getProfilePictureFileId())
+        FileEntity file = fileRepository.findByIdAndIsDeletedFalse(user.getProfilePictureFile().getId())
                 .orElseThrow(() -> ApiException.notFound("Profile picture not found"));
 
         try {

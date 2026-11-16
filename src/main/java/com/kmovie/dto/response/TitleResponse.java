@@ -22,7 +22,7 @@ public class TitleResponse {
     public TitleResponse(Title title) {
         this.id = title.getId();
         this.name = title.getName();
-        this.parentTitleId = title.getParentTitleId();
+        this.parentTitleId = title.getParentTitle().getId();
         this.genre = title.getGenre() == null || title.getGenre().isBlank()
                 ? List.of()
                 : java.util.Arrays.stream(title.getGenre().split(","))

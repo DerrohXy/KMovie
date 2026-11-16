@@ -24,6 +24,7 @@
         <libphonenumber.version>8.13.45</libphonenumber.version>
         <gcs.version>5.5.0</gcs.version>
         <jaffree.version>2023.09.10</jaffree.version>
+        <lombok.verion>1.18.48</lombok.verion>
     </properties>
 
     <dependencies>
@@ -103,7 +104,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <version>${lombok.verion}</version>
         </dependency>
 
         <dependency>
@@ -111,16 +112,32 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
     <build>
         <finalName>kmovie</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

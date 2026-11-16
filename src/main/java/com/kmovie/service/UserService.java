@@ -67,22 +67,22 @@ public class UserService {
     @Transactional
     public FileEntity setProfilePicture(User user, MultipartFile file) {
         FileEntity uploaded = s3StorageService.upload(file, "profile-pictures");
-        user.setProfilePictureFileId(uploaded.getId());
+        user.setProfilePictureFile(uploaded);
         userRepository.save(user);
         return uploaded;
     }
 
     @Transactional
     public void deleteProfilePicture(User user) {
-        if (user.getProfilePictureFileId() == null) {
+        if (user.getProfilePictureFile() == null) {
             return;
         }
-        fileRepository.findByIdAndIsDeletedFalse(user.getProfilePictureFileId()).ifPresent(f -> {
+        fileRepository.findByIdAndIsDeletedFalse(user.getProfilePictureFile().getId()).ifPresent(f -> {
             s3StorageService.delete(f.getStorageKey());
             f.markDeleted();
             fileRepository.save(f);
         });
-        user.setProfilePictureFileId(null);
+        user.setProfilePictureFile(null);
         userRepository.save(user);
     }
 }

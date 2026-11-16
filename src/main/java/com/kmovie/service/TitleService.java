@@ -73,7 +73,7 @@ public class TitleService {
 
         Title title = new Title();
         title.setName(request.getName());
-        title.setParentTitleId(request.getParentTitleId());
+        title.setParentTitle(this.getById(request.getParentTitleId()));
         title.setCategory(request.getCategory());
         title.setGenre(joinGenres(request.getGenre()));
         return titleRepository.save(title);
@@ -96,7 +96,7 @@ public class TitleService {
                 throw ApiException.badRequest("A title cannot be its own parent");
             }
             getById(request.getParentTitleId());
-            title.setParentTitleId(request.getParentTitleId());
+            title.setParentTitle(this.getById(request.getParentTitleId()));
         }
         return titleRepository.save(title);
     }
@@ -116,7 +116,7 @@ public class TitleService {
 
         List<Video> videos = videoRepository.findByTitleIdAndIsDeletedFalse(title.getId());
         for (Video video : videos) {
-            fileRepository.findByIdAndIsDeletedFalse(video.getFileId()).ifPresent(f -> {
+            fileRepository.findByIdAndIsDeletedFalse(video.getFile().getId()).ifPresent(f -> {
                 s3StorageService.delete(f.getStorageKey());
                 f.markDeleted();
                 fileRepository.save(f);

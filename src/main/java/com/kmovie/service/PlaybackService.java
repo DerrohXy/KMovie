@@ -15,14 +15,15 @@ import java.util.UUID;
 public class PlaybackService {
 
     private final VideoPlayRepository videoPlayRepository;
+    private final UserService userService;
 
     /** Records that a user started streaming a video (one row per play session). */
     @Transactional
     public void recordPlay(UUID userId, Video video) {
         VideoPlay play = new VideoPlay();
-        play.setUserId(userId);
-        play.setVideoId(video.getId());
-        play.setTitleId(video.getTitleId());
+        play.setUser(userService.getById(userId));
+        play.setVideo(video);
+        play.setTitle(video.getTitle());
         play.setStartPlayTime(LocalDateTime.now());
         videoPlayRepository.save(play);
     }

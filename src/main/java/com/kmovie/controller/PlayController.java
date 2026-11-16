@@ -49,7 +49,7 @@ public class PlayController {
                       HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Video video = videoService.getByIdAndTitle(videoId, titleId);
-        FileEntity file = fileRepository.findByIdAndIsDeletedFalse(video.getFileId())
+        FileEntity file = fileRepository.findByIdAndIsDeletedFalse(video.getFile().getId())
                 .orElseThrow(() -> ApiException.notFound("Video file not found"));
 
         long fileSize = file.getSize() != null ? file.getSize() : 0L;

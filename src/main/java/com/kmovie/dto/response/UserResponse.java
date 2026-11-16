@@ -30,7 +30,7 @@ public class UserResponse {
         this.subscription = user.getSubscription();
         this.isEmailVerified = user.isEmailVerified();
         this.isPhoneNumberVerified = user.isPhoneNumberVerified();
-        this.profilePictureFileId = user.getProfilePictureFileId();
+        this.profilePictureFileId = user.getProfilePictureFile().getId();
         this.isSuspended = user.isSuspended();
         this.dateCreated = user.getDateCreated();
     }

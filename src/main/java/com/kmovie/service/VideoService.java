@@ -8,6 +8,7 @@ import com.kmovie.entity.Video;
 import com.kmovie.enums.Category;
 import com.kmovie.exception.ApiException;
 import com.kmovie.repository.FileRepository;
+import com.kmovie.repository.TitleRepository;
 import com.kmovie.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
     private final FileRepository fileRepository;
+    private final TitleRepository titleRepository;
     private final TitleService titleService;
     private final S3StorageService s3StorageService;
     private final VideoDetailsService videoDetailsService;
@@ -35,6 +37,11 @@ public class VideoService {
     public Video getByIdAndTitle(UUID videoId, UUID titleId) {
         return videoRepository.findByIdAndTitleIdAndIsDeletedFalse(videoId, titleId)
                 .orElseThrow(() -> ApiException.notFound("Video not found under this title"));
+    }
+
+    public Video getById(UUID videoId) {
+        return videoRepository.findByIdAndIsDeletedFalse(videoId)
+                .orElseThrow(() -> ApiException.notFound("Video not found under this id"));
     }
 
     @Transactional
@@ -54,8 +61,8 @@ public class VideoService {
         FileEntity uploaded = s3StorageService.upload(file, "videos/" + titleId);
 
         Video video = new Video();
-        video.setTitleId(titleId);
-        video.setFileId(uploaded.getId());
+        video.setTitle(title);
+        video.setFile(uploaded);
         video.setName(name != null && !name.isBlank() ? name : file.getOriginalFilename());
         video.setDescription(description);
         // Prefer an explicitly supplied duration, fall back to what ffprobe read from the file.
@@ -96,7 +103,7 @@ public class VideoService {
     }
 
     private void deleteVideoAndFile(Video video) {
-        fileRepository.findByIdAndIsDeletedFalse(video.getFileId()).ifPresent(f -> {
+        fileRepository.findByIdAndIsDeletedFalse(video.getFile().getId()).ifPresent(f -> {
             s3StorageService.delete(f.getStorageKey());
             f.markDeleted();
             fileRepository.save(f);

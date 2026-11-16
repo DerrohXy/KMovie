@@ -1,12 +1,8 @@
 package com.kmovie.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "videos")
@@ -14,11 +10,13 @@ import java.util.UUID;
 @Setter
 public class Video extends BaseEntity {
 
-    @Column(name = "title_id", nullable = false)
-    private UUID titleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "title_id", nullable = false)
+    private Title title;
 
-    @Column(name = "file_id", nullable = false)
-    private UUID fileId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id",nullable = false)
+    private FileEntity file;
 
     @Column(name = "name", nullable = false)
     private String name;

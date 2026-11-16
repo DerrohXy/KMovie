@@ -47,6 +47,17 @@ app:
       endpoint: ${AWS_S3_ENDPOINT:}
       path-style-access: ${AWS_S3_PATH_STYLE_ACCESS:false}
 
+  gcs:
+    # Leave blank to fall back to Application Default Credentials
+    # (e.g. GOOGLE_APPLICATION_CREDENTIALS env var, or Workload Identity on GKE/Cloud Run).
+    project-id: ${GCS_PROJECT_ID:}
+    credentials-location: ${GCS_CREDENTIALS_LOCATION:}
+    bucket: ${GCS_BUCKET:kmovie-media}
+
+  ffmpeg:
+    # Leave blank to resolve ffprobe/ffmpeg from PATH (true in the provided Docker image).
+    bin-path: ${FFMPEG_BIN_PATH:}
+
   mail:
     from: ${MAIL_FROM:no-reply@kmovie.local}
     # SMTP settings are read by the external message-dispatch worker, kept here for reference/consistency

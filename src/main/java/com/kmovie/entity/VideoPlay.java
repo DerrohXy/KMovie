@@ -1,13 +1,10 @@
 package com.kmovie.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * A playback record. NOTE: videoId/titleId were added beyond the original
@@ -21,14 +18,17 @@ import java.util.UUID;
 @Setter
 public class VideoPlay extends BaseEntity {
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 
-    @Column(name = "video_id", nullable = false)
-    private UUID videoId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_id", nullable = false)
+    private Video video;
 
-    @Column(name = "title_id", nullable = false)
-    private UUID titleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "title_id", nullable = false)
+    private Title title;
 
     @Column(name = "start_play_time", nullable = false)
     private LocalDateTime startPlayTime;
